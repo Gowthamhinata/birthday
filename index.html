@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Little Surprise ♡</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    font-family: Georgia, serif;
+    background: linear-gradient(135deg, #ffe4ee, #fff6f0, #fbd3e2);
+    color: #a83d68;
+  }
+  .hearts {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .heart {
+    position: absolute;
+    bottom: -40px;
+    animation: float 9s linear infinite;
+    opacity: .6;
+  }
+  @keyframes float {
+    to { transform: translateY(-115vh) rotate(35deg); }
+  }
+  .card {
+    width: min(90%, 390px);
+    padding: 35px 24px;
+    text-align: center;
+    background: #ffffffb8;
+    border: 1px solid #fff;
+    border-radius: 28px;
+    box-shadow: 0 12px 45px #c76a8c25;
+    position: relative;
+  }
+  .big-heart { font-size: 48px; }
+  h1 { font-size: 29px; margin: 14px 0; }
+  p { line-height: 1.7; color: #885568; }
+  input, button {
+    width: 100%;
+    padding: 14px;
+    border-radius: 14px;
+    font-size: 16px;
+  }
+  input {
+    border: 1px solid #efb4c9;
+    background: white;
+    color: #8c385b;
+    margin: 12px 0;
+  }
+  button {
+    border: none;
+    background: #dc729b;
+    color: white;
+    cursor: pointer;
+  }
+  button:hover { background: #c95783; }
+  #message { min-height: 24px; color: #bd386b; }
+</style>
+</head>
+<body>
+<div class="hearts" id="hearts"></div>
+
+<main class="card">
+  <div class="big-heart">♡</div>
+  <h1>A Little Surprise</h1>
+  <p>
+    Someone made something special just for you...<br>
+    Ready to unlock a little love? 💌
+  </p>
+
+  <form id="birthdayForm">
+    <input
+      id="birthday"
+      type="text"
+      inputmode="numeric"
+      placeholder="DD / MM / YYYY"
+      aria-label="Enter your birthday"
+      autocomplete="off"
+      required
+    >
+    <button type="submit">Unlock My Surprise ♡</button>
+  </form>
+  <p id="message" aria-live="polite"></p>
+</main>
+
+<script>
+  const hearts = document.getElementById("hearts");
+
+  for (let i = 0; i < 18; i++) {
+    const heart = document.createElement("span");
+    heart.className = "heart";
+    heart.textContent = ["♡", "♥", "✧"][i % 3];
+    heart.style.left = Math.random() * 100 + "%";
+    heart.style.animationDelay = Math.random() * 8 + "s";
+    heart.style.animationDuration = (6 + Math.random() * 7) + "s";
+    heart.style.fontSize = (16 + Math.random() * 22) + "px";
+    hearts.appendChild(heart);
+  }
+
+  document.getElementById("birthdayForm")
+    .addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const entered = document.getElementById("birthday")
+        .value.trim().replace(/[.\-\s]/g, "/");
+
+      const valid = ["11/11/2005", "11/11/2005"].includes(entered);
+
+      if (valid) {
+        sessionStorage.setItem("birthdayUnlocked", "yes");
+        document.querySelector("h1").textContent =
+          "You found the key! 💗";
+        document.querySelector("main p").textContent =
+          "Your little surprise is waiting...";
+        document.getElementById("birthdayForm").innerHTML =
+          '<button type="button" onclick="showQuestion()">Continue ♡</button>';
+        document.getElementById("message").textContent =
+          "A little love is coming your way ✨";
+      } else {
+        document.getElementById("message").textContent =
+          "Not quite, my love! Try again ♡";
+      }
+    });
+
+  function showQuestion() {
+    document.querySelector("main").innerHTML = `
+      <div class="big-heart">💗</div>
+      <h1>One little question...</h1>
+      <p>Are u eager to see what I made for u? 🥹💕</p>
+      <button onclick="goodLove()">Yes 💖</button>
+      <button id="noButton" style="margin-top:12px;background:#f1b3c9">
+        No 🙈
+      </button>
+    `;
+
+    const no = document.getElementById("noButton");
+    no.addEventListener("pointerenter", runAway);
+    no.addEventListener("click", runAway);
+
+    function runAway() {
+      no.style.position = "fixed";
+      no.style.width = "100px";
+      no.style.left = Math.random() *
+        Math.max(1, window.innerWidth - 110) + "px";
+      no.style.top = Math.random() *
+        Math.max(1, window.innerHeight - 60) + "px";
+    }
+  }
+
+  function goodLove() {
+    document.querySelector("main").innerHTML = `
+      <div class="big-heart">💖</div>
+      <h1>Good, my love! 🥹</h1>
+      <p>I knew you would say yes! ♡</p>
+      <p>Our special album is coming soon... 💌</p>
+    `;
+  }
+</script>
+</body>
+</html>
