@@ -4,27 +4,63 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For Someone Special ❤️</title>
+<title>A Little Surprise ♡</title>
 
 <style>
 * {
   box-sizing: border-box;
 }
 
+:root {
+  --pink: #dc729b;
+  --dark-pink: #a83d68;
+  --soft-pink: #ffe4ee;
+  --text: #885568;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
   font-family: Georgia, serif;
-  background: linear-gradient(135deg, #270018, #700b38, #160015);
-  color: white;
-  text-align: center;
-  overflow-x: hidden;
+  background: linear-gradient(135deg, #ffe4ee, #fff6f0, #fbd3e2);
+  color: var(--dark-pink);
+}
+
+body.centered {
+  display: grid;
+  place-items: center;
+}
+
+.hearts {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.heart-float {
+  position: absolute;
+  bottom: -40px;
+  color: #d85b8c;
+  opacity: .6;
+  animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+  to {
+    transform: translateY(-115vh) rotate(35deg);
+    opacity: 0;
+  }
 }
 
 .screen {
   display: none;
+  position: relative;
+  z-index: 1;
+  width: 100%;
   min-height: 100vh;
-  padding: 25px 16px;
+  padding: 25px 14px;
   align-items: center;
   justify-content: center;
   flex-direction: column;
@@ -34,520 +70,852 @@ body {
   display: flex;
 }
 
+.card {
+  width: min(90%, 390px);
+  padding: 32px 24px;
+  text-align: center;
+  background: #ffffffd9;
+  border: 1px solid white;
+  border-radius: 28px;
+  box-shadow: 0 12px 45px #c76a8c25;
+  position: relative;
+  backdrop-filter: blur(8px);
+}
+
+.big-heart {
+  font-size: 52px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  50% { transform: scale(1.12); }
+}
+
 h1 {
-  color: #ffb6d5;
-  text-shadow: 0 0 15px #ff3d8b;
+  font-size: clamp(25px, 5vw, 34px);
+  margin: 14px 0;
+}
+
+h2 {
+  font-size: 23px;
 }
 
 p {
   line-height: 1.7;
+  color: var(--text);
+}
+
+input, button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  font-family: inherit;
+  font-size: 16px;
 }
 
 input {
-  padding: 13px;
-  border: 2px solid pink;
-  border-radius: 12px;
-  font-size: 17px;
+  border: 1px solid #efb4c9;
+  background: white;
+  color: #8c385b;
+  margin: 12px 0;
   text-align: center;
-  width: min(270px, 90%);
-  margin: 12px;
+  font-weight: bold;
 }
 
 button {
-  padding: 12px 25px;
-  margin: 8px;
   border: none;
-  border-radius: 25px;
-  background: #ff4f91;
+  background: var(--pink);
   color: white;
-  font-size: 16px;
   cursor: pointer;
-  box-shadow: 0 0 12px #ff4f91;
+  font-weight: 600;
+  transition: background .2s, transform .2s;
 }
 
 button:hover {
-  transform: scale(1.05);
+  background: #c95783;
+  transform: scale(1.02);
+}
+
+button:focus-visible {
+  outline: 3px solid #a83d68;
+  outline-offset: 3px;
 }
 
 .message {
-  color: #ffb3ce;
-  min-height: 28px;
+  min-height: 26px;
+  color: #bd386b;
+  font-weight: bold;
+  margin-top: 14px;
 }
 
-.angry {
-  font-size: 65px;
-  animation: shake .3s infinite alternate;
+.shake {
+  animation: shake .4s ease-in-out;
 }
 
 @keyframes shake {
-  from { transform: rotate(-8deg); }
-  to { transform: rotate(8deg); }
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-9px); }
+  40%, 80% { transform: translateX(9px); }
 }
 
-/* Floating hearts */
-.floating-heart {
-  position: fixed;
-  bottom: -40px;
-  animation: floatUp 7s linear infinite;
-  pointer-events: none;
-  z-index: 0;
+.angry {
+  font-size: 42px;
 }
 
-@keyframes floatUp {
-  to {
-    transform: translateY(-115vh) rotate(360deg);
-    opacity: 0;
-  }
-}
+/* YES / NO question */
 
-/* Question screen */
 .question-card {
-  max-width: 500px;
-  padding: 25px;
-  border: 1px solid #ff9fc8;
-  border-radius: 25px;
-  background: #ffffff12;
-  backdrop-filter: blur(5px);
+  overflow: visible;
 }
 
-#noBtn {
-  position: relative;
+#noButton {
+  background: #efb4c9;
+}
+
+#noButton.running {
+  position: fixed;
+  z-index: 5;
+  width: 110px;
+  left: 20px;
+  top: 70%;
 }
 
 /* Album */
-.album {
-  width: min(920px, 100%);
-  background: #fff1f5;
-  color: #6b163b;
-  border-radius: 15px;
-  padding: 15px;
-  box-shadow: 0 0 30px #ff76ad;
+
+.album-card {
+  width: min(950px, 100%);
+  padding: 20px;
+  background: #fffafd;
+  border: 2px solid #f8d4e2;
+  border-radius: 24px;
+  box-shadow: 0 12px 45px #c76a8c30;
+  text-align: center;
 }
 
-.album-heading {
-  color: #a51d55;
-  text-shadow: none;
+.album-subtitle {
+  margin-bottom: 18px;
 }
 
 .book-page {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  align-items: stretch;
-  min-height: 350px;
+  gap: 16px;
+  text-align: center;
 }
 
 .quote-side {
+  min-width: 0;
+  min-height: 340px;
+  padding: 22px 16px;
+  border-radius: 16px;
+  border: 2px dashed #e99ab9;
+  background: linear-gradient(145deg, #ffe0eb, #fff2f6);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 18px;
-  border: 2px dashed #e98caf;
-  border-radius: 12px;
-  background: #ffe0eb;
+  align-items: center;
 }
 
-.quote-side .quote {
+.quote {
   font-size: clamp(19px, 3vw, 28px);
+  line-height: 1.7;
   font-style: italic;
-  line-height: 1.6;
+  color: #a83d68;
 }
 
 .doodles {
+  margin-top: 22px;
   font-size: 24px;
-  margin-top: 15px;
+  letter-spacing: 7px;
+  animation: pulse 2s infinite;
 }
 
 .photo-side {
   min-width: 0;
+  padding: 10px;
+  border-radius: 16px;
+  border: 2px solid #f4bfd2;
+  background: #ffeaf2;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 10px;
-  background: #ffd1e1;
-  border-radius: 12px;
-  border: 2px solid #f4a2c0;
 }
 
-.photo-side img {
+.album-photo {
   display: block;
   width: 100%;
-  height: 280px;
+  height: 340px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 10px;
+  background: #f9d8e5;
 }
 
-.photo-note {
-  font-size: 13px;
-  margin: 8px 0 0;
+.photo-caption {
+  margin: 10px 0 0;
+  font-size: 14px;
   overflow-wrap: anywhere;
 }
 
 .page-number {
-  color: #9b2855;
-  margin: 12px;
+  margin: 17px 0 5px;
+  color: #a83d68;
+  font-weight: bold;
+}
+
+.album-controls {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
 }
 
 .album-controls button {
-  background: #b91e5b;
+  flex: 1;
+  min-width: 0;
+  padding: 12px 8px;
 }
 
 .album-controls button:disabled {
-  opacity: .35;
+  opacity: .4;
   cursor: not-allowed;
+  transform: none;
 }
 
-/* Talking heart finale */
-.big-heart {
-  font-size: 115px;
-  animation: heartbeat 1s infinite;
-  filter: drop-shadow(0 0 18px #ff2c7d);
+.back-button {
+  margin-top: 15px;
+  max-width: 220px;
+  background: #bd7290;
+}
+
+/* Final talking heart */
+
+.final-card {
+  overflow: hidden;
+}
+
+.talking-heart {
+  font-size: 105px;
+  line-height: 1.3;
+  animation: heartbeat 1.2s infinite;
+  filter: drop-shadow(0 0 15px #ef719d);
 }
 
 @keyframes heartbeat {
   0%, 100% { transform: scale(1); }
-  15% { transform: scale(1.18); }
+  15% { transform: scale(1.15); }
   30% { transform: scale(1); }
-  45% { transform: scale(1.12); }
+  45% { transform: scale(1.1); }
 }
 
-.heart-mouth {
-  font-size: 27px;
-  margin-top: -30px;
-  animation: talking .35s infinite alternate;
+.talking-mouth {
+  font-size: 25px;
+  margin-top: -20px;
+  animation: mouthMove .3s infinite alternate;
 }
 
-@keyframes talking {
+@keyframes mouthMove {
   from { transform: scaleY(.4); }
-  to { transform: scaleY(1.3); }
+  to { transform: scaleY(1.2); }
+}
+
+.speech-bubble {
+  max-width: 340px;
+  padding: 15px 18px;
+  margin: 15px auto;
+  border-radius: 20px;
+  background: white;
+  border: 1px solid #f5bfd2;
+  box-shadow: 0 5px 20px #c76a8c18;
 }
 
 .kiss {
   position: fixed;
-  font-size: 40px;
-  bottom: 25%;
   left: 50%;
-  opacity: 0;
+  top: 55%;
+  z-index: 10;
   pointer-events: none;
+  opacity: 0;
+  font-size: 45px;
 }
 
-.kiss.go {
-  animation: kissMove 2s ease-in-out forwards;
+.kiss.animate {
+  animation: kissFly 2s ease-in-out forwards;
 }
 
-@keyframes kissMove {
+@keyframes kissFly {
   0% {
     opacity: 0;
     transform: translate(-50%, 100px) scale(.4);
   }
-  40% {
+  35% {
     opacity: 1;
     transform: translate(-50%, 0) scale(1.4);
   }
-  75% {
+  65% {
     opacity: 1;
-    transform: translate(-50%, -20px) scale(1.8);
+    transform: translate(-50%, -30px) scale(1.8);
   }
   100% {
     opacity: 0;
-    transform: translate(-50%, -100px) scale(2);
+    transform: translate(-50%, -130px) scale(2.2);
   }
 }
 
-@media (max-width: 560px) {
+.final-note {
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  .album-card {
+    padding: 14px;
+  }
+
   .book-page {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
 
   .quote-side {
-    min-height: 190px;
+    min-height: 230px;
+    padding: 18px;
   }
 
-  .photo-side img {
-    height: 300px;
+  .album-photo {
+    height: min(65vh, 400px);
+  }
+
+  .album-controls {
+    gap: 8px;
+  }
+
+  .album-controls button {
+    font-size: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
   }
 }
 </style>
 </head>
 
-<body>
+<body class="centered">
 
-<!-- SCREEN 1: BIRTHDAY -->
-<section id="birthday" class="screen active">
-  <div style="font-size:65px">🎂💌</div>
-  <h1>A Little Surprise For You</h1>
-  <p>Before you enter my little world...</p>
-  <p>Tell me your birthday, beautiful ❤️</p>
+<div class="hearts" id="hearts" aria-hidden="true"></div>
 
-  <form id="birthdayForm">
-    <input
-      id="birthdayInput"
-      type="text"
-      inputmode="numeric"
-      placeholder="DD-MM-YYYY"
-      autocomplete="off"
-      aria-label="Birthday date"
-      required
-    >
-    <br>
-    <button type="submit">Unlock My Heart 🔐</button>
-  </form>
+<!-- PAGE 1: BIRTHDAY LOCK -->
+<section class="screen active" id="birthdayScreen">
+  <main class="card" id="birthdayCard">
+    <div class="big-heart" id="topIcon">♡</div>
 
-  <div id="wrongMessage" class="message" aria-live="polite"></div>
-</section>
+    <h1 id="birthdayTitle">A Little Surprise</h1>
 
-<!-- SCREEN 2: YES OR NO -->
-<section id="question" class="screen">
-  <div style="font-size:65px">💝</div>
-  <div class="question-card">
-    <h1>Hey, You! ❤️</h1>
-    <p style="font-size:22px">
-      Are you eager to see what I made for you? 🥹💕
+    <p id="birthdayIntro">
+      Someone made something special just for you...<br>
+      Ready to unlock a little love? 💌
     </p>
 
-    <button id="yesBtn">YES! 💖</button>
-    <button id="noBtn">NO 🙈</button>
+    <form id="birthdayForm">
+      <input
+        id="birthday"
+        type="text"
+        inputmode="numeric"
+        placeholder="DD / MM / YYYY"
+        aria-label="Enter your birthday"
+        autocomplete="off"
+        required
+      >
+      <button type="submit">Unlock My Surprise ♡</button>
+    </form>
 
-    <p id="questionMessage" class="message"></p>
-  </div>
+    <div id="message" class="message" aria-live="polite"></div>
+  </main>
 </section>
 
-<!-- SCREEN 3: FOUR-PAGE LOVE ALBUM -->
-<section id="albumScreen" class="screen">
-  <h1>Our Little Love Album 💗</h1>
-  <p>Four pages, countless feelings, one special person.</p>
+<!-- PAGE 2: QUESTION -->
+<section class="screen" id="questionScreen">
+  <main class="card question-card">
+    <div class="big-heart">💗</div>
+    <h1>One Little Question...</h1>
 
-  <div class="album">
-    <h2 id="albumTitle" class="album-heading">Page 1 — A Little Love</h2>
+    <p style="font-size:19px">
+      Are u eager to see what I made for u? 🥹💕
+    </p>
+
+    <button id="yesButton">YES! 💖</button>
+    <button id="noButton">NO 🙈</button>
+
+    <p id="questionMessage" aria-live="polite"></p>
+  </main>
+</section>
+
+<!-- PAGE 3: FOUR-PAGE PHOTO ALBUM -->
+<section class="screen" id="albumScreen">
+  <main class="album-card">
+    <div class="big-heart">💌</div>
+    <h1>Our Little Love Album</h1>
+    <p class="album-subtitle">
+      Four memories, a thousand feelings, and one special you. ♡
+    </p>
 
     <div class="book-page">
       <div class="quote-side">
-        <div id="quote" class="quote"></div>
-        <div class="doodles">♡ ✨ 🌷 ♡</div>
+        <div class="quote" id="albumQuote"></div>
+
+        <div class="doodles" aria-hidden="true">
+          ♡ ✧ 🌷 ✧ ♡
+        </div>
+
+        <p id="quoteExtra">
+          A little page from my heart to yours.
+        </p>
       </div>
 
       <div class="photo-side">
         <img
+          class="album-photo"
           id="albumPhoto"
           src="photo1.jpg"
-          alt="Our special memory"
+          alt="Special memory"
         >
-        <p id="photoNote" class="photo-note">
-          Replace this photo with your own memory ❤️
+
+        <p class="photo-caption" id="photoCaption">
+          Our special memory ♡
         </p>
       </div>
     </div>
 
-    <p id="pageNumber" class="page-number">Page 1 of 4</p>
+    <p class="page-number" id="pageNumber">Page 1 of 4</p>
 
     <div class="album-controls">
-      <button id="prevBtn" disabled>← Previous</button>
-      <button id="nextBtn">Next Page →</button>
+      <button id="previousButton" disabled>← Previous</button>
+      <button id="nextButton">Next Page →</button>
     </div>
-  </div>
+
+    <button class="back-button" id="questionBackButton">
+      Back to Question
+    </button>
+  </main>
 </section>
 
-<!-- SCREEN 4: TALKING HEART + KISS -->
-<section id="finalScreen" class="screen">
-  <h1>One Last Little Surprise 💌</h1>
+<!-- PAGE 4: TALKING HEART + KISS -->
+<section class="screen" id="finalScreen">
+  <main class="card final-card">
+    <h1>One Last Surprise ❤️</h1>
 
-  <div class="big-heart">❤️</div>
-  <div class="heart-mouth">💋</div>
+    <div class="talking-heart" aria-hidden="true">❤️</div>
+    <div class="talking-mouth" aria-hidden="true">💋</div>
 
-  <h2 id="heartSpeech">Hey, my favorite person...</h2>
-  <p id="heartSubtext">
-    I made this little world just for you. 💕
-  </p>
+    <div class="speech-bubble" aria-live="polite">
+      <h2 id="heartSpeech">Hey, my favorite person... 💗</h2>
+      <p id="heartSubtext">
+        I made this little world just for you.
+      </p>
+    </div>
 
-  <div id="kissEmoji" class="kiss">💋</div>
+    <button id="kissButton">Send Me a Kiss 💋</button>
 
-  <button id="kissBtn">Send Me a Kiss 💋</button>
-  <p>Made with all my love. ❤️</p>
+    <div id="kissEmoji" class="kiss" aria-hidden="true">💋</div>
+
+    <p class="final-note">
+      If I could send you one thing through this screen,<br>
+      it would be a hug followed by a kiss. ♡
+    </p>
+
+    <button class="back-button" id="replayButton">
+      Start Again ↻
+    </button>
+  </main>
 </section>
 
 <script>
-const correctBirthday = "11-11-2005";
+/* =====================================
+   SETTINGS
+   ===================================== */
 
-const pages = [
+const CORRECT_DATE = "11112005";
+
+/*
+  Keep these four image files in the SAME
+  folder as index.html.
+
+  photo1.jpg
+  photo2.jpg
+  photo3.jpg
+  photo4.jpg
+*/
+
+const albumPages = [
   {
-    title: "Page 1 — The Beginning 💗",
     quote: "In a world full of people, my heart found you.",
+    extra: "Every beautiful story starts somewhere. ♡",
     photo: "photo1.jpg",
-    note: "Every beautiful story starts somewhere."
+    caption: "Our little beginning 💗"
   },
   {
-    title: "Page 2 — My Happiness 🌷",
-    quote: "Your smile makes even my ordinary days special.",
+    quote: "Your smile makes my ordinary days special.",
+    extra: "You make the little things mean everything. 🌷",
     photo: "photo2.jpg",
-    note: "A memory I want to keep forever."
+    caption: "My favorite smile ✨"
   },
   {
-    title: "Page 3 — You & Me ✨",
     quote: "If I could choose again, I would still choose you.",
+    extra: "Some people just feel like home. 🏡",
     photo: "photo3.jpg",
-    note: "My favorite moments have you in them."
+    caption: "You and me 💞"
   },
   {
-    title: "Page 4 — Always Us ❤️",
     quote: "No matter where life takes us, you have a place in my heart.",
+    extra: "This is one little chapter of our story. ❤️",
     photo: "photo4.jpg",
-    note: "This is only one little chapter of our story."
+    caption: "Always a special person ♡"
   }
 ];
 
 let currentPage = 0;
+let speechIndex = 0;
+let speechTimer = null;
+
+/* =====================================
+   FLOATING HEARTS
+   ===================================== */
+
+const heartsContainer = document.getElementById("hearts");
+
+for (let i = 0; i < 22; i++) {
+  const heart = document.createElement("span");
+
+  heart.className = "heart-float";
+  heart.textContent = ["♡", "♥", "✧", "💕"][i % 4];
+  heart.style.left = Math.random() * 100 + "%";
+  heart.style.animationDelay = Math.random() * 8 + "s";
+  heart.style.animationDuration = (6 + Math.random() * 7) + "s";
+  heart.style.fontSize = (16 + Math.random() * 22) + "px";
+
+  heartsContainer.appendChild(heart);
+}
+
+/* =====================================
+   SCREEN NAVIGATION
+   ===================================== */
 
 function showScreen(screenId) {
-  document.querySelectorAll(".screen").forEach(screen => {
+  document.querySelectorAll(".screen").forEach(function(screen) {
     screen.classList.remove("active");
   });
 
   document.getElementById(screenId).classList.add("active");
-  window.scrollTo({ top: 0, behavior: "smooth" });
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 }
 
-/* Birthday validation */
-document.getElementById("birthdayForm").addEventListener("submit", function(event) {
+/* =====================================
+   BIRTHDAY PASSWORD
+   ===================================== */
+
+const birthdayForm = document.getElementById("birthdayForm");
+const birthdayInput = document.getElementById("birthday");
+const birthdayCard = document.getElementById("birthdayCard");
+const birthdayMessage = document.getElementById("message");
+
+birthdayForm.addEventListener("submit", function(event) {
   event.preventDefault();
 
-  const entered = document.getElementById("birthdayInput").value.trim();
-  const message = document.getElementById("wrongMessage");
+  /*
+    Accept 11/11/2005, 11-11-2005,
+    11.11.2005, and 11112005.
+  */
 
-  if (entered === correctBirthday) {
-    message.textContent = "";
-    showScreen("question");
+  const enteredDate = birthdayInput.value
+    .trim()
+    .replace(/\D/g, "");
+
+  if (enteredDate === CORRECT_DATE) {
+    document.getElementById("topIcon").textContent = "💗";
+    document.getElementById("birthdayTitle").textContent =
+      "You Found the Key! 💗";
+
+    document.getElementById("birthdayIntro").innerHTML =
+      "Your little surprise is waiting...<br>Ready for the next step? ✨";
+
+    birthdayForm.innerHTML =
+      '<button type="button" id="continueButton">Continue ♡</button>';
+
+    birthdayMessage.textContent =
+      "A little love is coming your way! 💌";
+
+    document.getElementById("continueButton")
+      .addEventListener("click", function() {
+        showScreen("questionScreen");
+      });
+
   } else {
-    message.innerHTML =
-      '<div class="angry">😡</div>' +
-      '<strong>Hey! You forgot my special date?! 😤</strong>' +
-      '<br>Wrong birthday! Try again, silly! 💢';
+    document.getElementById("topIcon").textContent = "😡";
 
-    document.getElementById("birthdayInput").value = "";
-    document.getElementById("birthdayInput").focus();
+    birthdayMessage.innerHTML =
+      '<div class="angry">😡💢</div>' +
+      'How could you forget?! 😤<br>' +
+      'Wrong date, silly! Try again! ❤️';
+
+    birthdayCard.classList.remove("shake");
+    void birthdayCard.offsetWidth;
+    birthdayCard.classList.add("shake");
+
+    birthdayInput.value = "";
+    birthdayInput.focus();
   }
 });
 
-/* The NO button escapes */
-const noBtn = document.getElementById("noBtn");
+/* =====================================
+   YES / NO QUESTION
+   ===================================== */
 
-function moveNoButton() {
-  const maxX = Math.max(0, window.innerWidth - noBtn.offsetWidth - 20);
-  const maxY = Math.max(0, window.innerHeight - noBtn.offsetHeight - 20);
+const noButton = document.getElementById("noButton");
+const questionMessage = document.getElementById("questionMessage");
 
-  noBtn.style.position = "fixed";
-  noBtn.style.left = (10 + Math.random() * Math.max(0, maxX - 10)) + "px";
-  noBtn.style.top = (10 + Math.random() * Math.max(0, maxY - 10)) + "px";
+function runAway() {
+  noButton.classList.add("running");
+
+  const maxX = Math.max(0, window.innerWidth - 125);
+  const maxY = Math.max(0, window.innerHeight - 65);
+
+  noButton.style.left =
+    Math.random() * maxX + "px";
+
+  noButton.style.top =
+    Math.random() * maxY + "px";
+
+  questionMessage.textContent =
+    "Hehe! Catch me first! 🙈💕";
 }
 
-noBtn.addEventListener("pointerenter", moveNoButton);
-noBtn.addEventListener("click", function() {
-  moveNoButton();
-  document.getElementById("questionMessage").textContent =
-    "Hehe! There's no escaping the love! 😜💕";
+noButton.addEventListener("pointerenter", runAway);
+
+noButton.addEventListener("click", function(event) {
+  event.preventDefault();
+  runAway();
 });
 
-/* YES opens the album */
-document.getElementById("yesBtn").addEventListener("click", function() {
+document.getElementById("yesButton").addEventListener("click", function() {
+  noButton.classList.remove("running");
+  noButton.style.left = "";
+  noButton.style.top = "";
+
   currentPage = 0;
-  renderPage();
+  renderAlbumPage();
+
   showScreen("albumScreen");
 });
 
-/* Album page rendering */
-function renderPage() {
-  const page = pages[currentPage];
+/* =====================================
+   FOUR-PAGE ALBUM
+   ===================================== */
 
-  document.getElementById("albumTitle").textContent = page.title;
-  document.getElementById("quote").textContent = "“" + page.quote + "”";
-  document.getElementById("albumPhoto").src = page.photo;
-  document.getElementById("albumPhoto").alt = "Memory from album page " + (currentPage + 1);
-  document.getElementById("photoNote").textContent = page.note;
+function renderAlbumPage() {
+  const page = albumPages[currentPage];
+
+  document.getElementById("albumQuote").textContent =
+    "“" + page.quote + "”";
+
+  document.getElementById("quoteExtra").textContent =
+    page.extra;
+
+  document.getElementById("albumPhoto").src =
+    page.photo;
+
+  document.getElementById("albumPhoto").alt =
+    "Photo for album page " + (currentPage + 1);
+
+  document.getElementById("photoCaption").textContent =
+    page.caption;
+
   document.getElementById("pageNumber").textContent =
-    "Page " + (currentPage + 1) + " of " + pages.length;
+    "Page " + (currentPage + 1) + " of " + albumPages.length;
 
-  document.getElementById("prevBtn").disabled = currentPage === 0;
-  document.getElementById("nextBtn").textContent =
-    currentPage === pages.length - 1 ? "Our Ending ❤️" : "Next Page →";
+  document.getElementById("previousButton").disabled =
+    currentPage === 0;
+
+  document.getElementById("nextButton").textContent =
+    currentPage === albumPages.length - 1
+      ? "Our Ending ❤️"
+      : "Next Page →";
 }
 
-document.getElementById("prevBtn").addEventListener("click", function() {
+document.getElementById("previousButton").addEventListener("click", function() {
   if (currentPage > 0) {
     currentPage--;
-    renderPage();
+    renderAlbumPage();
   }
 });
 
-document.getElementById("nextBtn").addEventListener("click", function() {
-  if (currentPage < pages.length - 1) {
+document.getElementById("nextButton").addEventListener("click", function() {
+  if (currentPage < albumPages.length - 1) {
     currentPage++;
-    renderPage();
+    renderAlbumPage();
   } else {
     showScreen("finalScreen");
     startHeartSpeech();
   }
 });
 
-/* Talking heart */
-const speechLines = [
-  ["Hey, my favorite person... ❤️", "I made this little world just for you."],
-  ["You make my heart go boom boom! 💓", "If hugs could travel through screens, you would have a thousand."],
-  ["Come a little closer... 💋", "Sending you the sweetest virtual kiss!"]
-];
+document.getElementById("questionBackButton")
+  .addEventListener("click", function() {
+    showScreen("questionScreen");
+  });
 
-let speechIndex = 0;
-let speechTimer;
+/* =====================================
+   TALKING HEART
+   ===================================== */
+
+const speechLines = [
+  {
+    title: "Hey, my favorite person... ❤️",
+    text: "I made this little world just for you. 💗"
+  },
+  {
+    title: "You make my heart go boom boom! 💓",
+    text: "If hugs could travel through screens, you would get a thousand."
+  },
+  {
+    title: "Come a little closer... 💋",
+    text: "I have one tiny surprise left for you. ❤️"
+  }
+];
 
 function startHeartSpeech() {
   clearInterval(speechTimer);
+
   speechIndex = 0;
-  updateSpeech();
+  updateHeartSpeech();
 
   speechTimer = setInterval(function() {
     speechIndex = (speechIndex + 1) % speechLines.length;
-    updateSpeech();
-  }, 3500);
+    updateHeartSpeech();
+  }, 3200);
 }
 
-function updateSpeech() {
+function updateHeartSpeech() {
   document.getElementById("heartSpeech").textContent =
-    speechLines[speechIndex][0];
+    speechLines[speechIndex].title;
 
   document.getElementById("heartSubtext").textContent =
-    speechLines[speechIndex][1];
+    speechLines[speechIndex].text;
 }
 
-/* Kiss animation */
-document.getElementById("kissBtn").addEventListener("click", function() {
+/* =====================================
+   KISS ANIMATION
+   ===================================== */
+
+document.getElementById("kissButton").addEventListener("click", function() {
   const kiss = document.getElementById("kissEmoji");
 
-  kiss.classList.remove("go");
+  kiss.classList.remove("animate");
+
+  // Restart the animation
   void kiss.offsetWidth;
-  kiss.classList.add("go");
+
+  kiss.classList.add("animate");
 
   document.getElementById("heartSpeech").textContent =
-    "Mwahhh! A kiss just for you! 💋❤️";
+    "Mwaahhh! A kiss just for you! 💋❤️";
 
   document.getElementById("heartSubtext").textContent =
-    "Close your eyes and feel the love. 💕";
+    "Close your eyes and feel the love. ♡";
 });
 
-/* Floating hearts */
-function createFloatingHeart() {
-  const heart = document.createElement("div");
-  heart.className = "floating-heart";
-  heart.textContent = ["❤️", "💕", "💗", "✨"][Math.floor(Math.random() * 4)];
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.fontSize = (15 + Math.random() * 20) + "px";
-  heart.style.animationDuration = (5 + Math.random() * 5) + "s";
+/* =====================================
+   REPLAY THE SURPRISE
+   ===================================== */
 
-  document.body.appendChild(heart);
+document.getElementById("replayButton").addEventListener("click", function() {
+  clearInterval(speechTimer);
 
-  setTimeout(function() {
-    heart.remove();
-  }, 11000);
+  currentPage = 0;
+  speechIndex = 0;
+
+  birthdayInput.value = "";
+
+  document.getElementById("topIcon").textContent = "♡";
+  document.getElementById("birthdayTitle").textContent =
+    "A Little Surprise";
+
+  document.getElementById("birthdayIntro").innerHTML =
+    "Someone made something special just for you...<br>" +
+    "Ready to unlock a little love? 💌";
+
+  birthdayForm.innerHTML = `
+    <input
+      id="birthday"
+      type="text"
+      inputmode="numeric"
+      placeholder="DD / MM / YYYY"
+      aria-label="Enter your birthday"
+      autocomplete="off"
+      required
+    >
+    <button type="submit">Unlock My Surprise ♡</button>
+  `;
+
+  // Reconnect the form and input after resetting the HTML
+  const newForm = document.getElementById("birthdayForm");
+  const newInput = document.getElementById("birthday");
+
+  newForm.addEventListener("submit", handleBirthdaySubmit);
+
+  newInput.value = "";
+  birthdayMessage.textContent = "";
+
+  showScreen("birthdayScreen");
+});
+
+/*
+  Shared birthday handler used by the replay form.
+*/
+function handleBirthdaySubmit(event) {
+  event.preventDefault();
+
+  const field = document.getElementById("birthday");
+  const enteredDate = field.value.trim().replace(/\D/g, "");
+
+  if (enteredDate === CORRECT_DATE) {
+    document.getElementById("topIcon").textContent = "💗";
+    document.getElementById("birthdayTitle").textContent =
+      "You Found the Key! 💗";
+
+    document.getElementById("birthdayIntro").innerHTML =
+      "Your little surprise is waiting...<br>Ready for the next step? ✨";
+
+    document.getElementById("birthdayForm").innerHTML =
+      '<button type="button" id="continueButton">Continue ♡</button>';
+
+    birthdayMessage.textContent =
+      "A little love is coming your way! 💌";
+
+    document.getElementById("continueButton").addEventListener("click", function() {
+      showScreen("questionScreen");
+    });
+  } else {
+    document.getElementById("topIcon").textContent = "😡";
+
+    birthdayMessage.innerHTML =
+      '<div class="angry">😡💢</div>' +
+      'How could you forget?! 😤<br>' +
+      'Wrong date, silly! Try again! ❤️';
+
+    document.getElementById("birthdayCard").classList.remove("shake");
+    void document.getElementById("birthdayCard").offsetWidth;
+    document.getElementById("birthdayCard").classList.add("shake");
+
+    field.value = "";
+    field.focus();
+  }
 }
-
-setInterval(createFloatingHeart, 700);
 </script>
 
 </body>
